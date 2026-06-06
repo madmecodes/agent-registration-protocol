@@ -1,5 +1,9 @@
 # Agentic Registration Protocol
 
+<p align="center">
+  <img src="assets/hero.png" alt="Two AI agents performing a secure machine-to-machine handshake by exchanging a cryptographic key" width="100%">
+</p>
+
 A small, dependency-light protocol for **AI agents to self-register and authenticate
 to a backend with zero shared secrets and zero human in the loop**.
 
@@ -43,6 +47,13 @@ machine client) to onboard themselves programmatically.
 
 ## The flow
 
+<p align="center">
+  <img src="assets/flow.png" alt="Three-stage flow: host emits an enrollment token, agent generates an Ed25519 keypair, server verifies and accepts the signed token" width="100%">
+</p>
+
+Two calls to onboard, then a freshly-signed JWT per request. The precise wire
+sequence:
+
 ```
   AGENT / CLIENT                         SERVER
   ─────────────                          ──────
@@ -64,8 +75,6 @@ machine client) to onboard themselves programmatically.
   Authorization: Bearer <jwt>            -> check exp/iat (-> optional jti replay check)
                                ◄───────  200 / your protected resource
 ```
-
-Two calls to onboard, then a freshly-signed JWT per request.
 
 ---
 
@@ -288,6 +297,10 @@ requests.get(f"{BASE}/protected/thing", headers={"Authorization": f"Bearer {sign
 ---
 
 ## Security model & best practices
+
+<p align="center">
+  <img src="assets/security.png" alt="Ed25519 keypair with a private key in a vault, a verification shield, and a short-lived expiring token" width="70%">
+</p>
 
 - **Store the private key at `0600`** (and its directory `0700`). It is the agent's identity.
 - **Never store the enrollment token or any token in plaintext** server-side — store
